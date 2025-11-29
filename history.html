@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>LUMPIA KING | Order History</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div class="page-container">
+      <nav>
+        <div class="logo">
+          <img src="image/lumpia.png" width="50px" alt="" />
+          <p>Lumpia King</p>
+        </div>
+
+        <!-- WRAP BOTH MENUS (desktop & mobile use the SAME items) -->
+        <div class="nav-links" id="nav-links">
+          <ul class="a-menu">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="about.html">About</a></li>
+            <li><a href="menu.html">Menu</a></li>
+            <li><a href="history.html" class="active">History</a></li>
+          </ul>
+
+          <ul>
+            <li>
+              <a href="cart.html" class="cart-content" id="cart-link">
+                <img src="image/cart.png" width="20px" alt="" />
+                (<span id="cart-count">0</span>)
+              </a>
+            </li>
+          </ul>
+        </div>
+        <!-- BURGER BUTTON -->
+        <div class="burger" id="burger">
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
+      </nav>
+
+      <main>
+        <div class="section-1">
+          <div class="content">
+            <h1>Order History</h1>
+          </div>
+        </div>
+        <div class="section-2">
+          <div class="content title">
+            <h1>Track your Order History here!</h1>
+            <p>
+              View all your past purchases in one place. Check dates, items ordered, and totals to easily keep track of
+              your previous transactions.
+            </p>
+          </div>
+
+          <div id="history-container"></div>
+        </div>
+      </main>
+    </div>
+    <footer>
+      <div class="footer-container">
+        <div class="footer-section">
+          <h2>LUMPIA KING</h2>
+          <p>Delicious lumpia delivered to your door!</p>
+        </div>
+        <div class="footer-section">
+          <h3>Contact Us</h3>
+          <p>Phone: +63 912 345 6789</p>
+          <p>Email: info@lumpiaking.com</p>
+        </div>
+        <div class="footer-section">
+          <h3>Our Location</h3>
+          <iframe
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3875.123456789!2d121.03456!3d14.65678!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3397c123456789ab%3A0xabcdef1234567890!2sLumpia%20King!5e0!3m2!1sen!2sph!4v1600000000000!5m2!1sen!2sph"
+            width="100%"
+            height="150"
+            style="border: 0"
+            allowfullscreen=""
+            loading="lazy"
+          >
+          </iframe>
+        </div>
+      </div>
+    </footer>
+  </body>
+  <script src="script.js"></script>
+</html>
