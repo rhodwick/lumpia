@@ -1,3 +1,53 @@
+const orderButton = document.getElementById("order-now"); // may be null
+
+if (orderButton) {
+  // Modal logic
+  const checkoutModal = document.getElementById("checkoutModal");
+  const closeBtn = checkoutModal.querySelector(".close-btn");
+  const cancelBtn = document.getElementById("cancelOrder");
+  const checkoutForm = document.getElementById("checkout-form");
+
+  // Show modal when order button clicked
+  orderButton.addEventListener("click", (e) => {
+    e.preventDefault(); // prevent default behaviour
+    checkoutModal.style.display = "flex";
+  });
+
+  // Close modal on (X) click
+  closeBtn.addEventListener("click", () => {
+    checkoutModal.style.display = "none";
+  });
+
+  // Cancel button: close modal
+  cancelBtn.addEventListener("click", () => {
+    checkoutModal.style.display = "none";
+  });
+
+  // When user clicks outside modal content — close it
+  window.addEventListener("click", (e) => {
+    if (e.target === checkoutModal) {
+      checkoutModal.style.display = "none";
+    }
+  });
+
+  // Handle form submission — Place Order
+  checkoutForm.addEventListener("submit", (e) => {
+    e.preventDefault();
+    // Collect form data
+    const fullname = checkoutForm.fullname.value;
+    const address = checkoutForm.address.value;
+    const phone = checkoutForm.phone.value;
+    const landmark = checkoutForm.landmark.value;
+
+    // You can further validate, then process order logic
+    // Example: call your orderNow() function or gather cart + user data here
+    orderNow({ fullname, address, phone, landmark });
+
+    // Then close modal
+    checkoutModal.style.display = "none";
+  });
+}
+
 //burger toggle
 
 const burger = document.getElementById("burger");
@@ -165,21 +215,40 @@ function removeFromCartItem(itemName) {
   updateCartCount();
   displayCart();
 }
-function orderNow() {
+function orderNow(userDetails) {
   const cart = JSON.parse(localStorage.getItem("cart")) || [];
   if (cart.length === 0) {
     alert("Your cart is empty.");
     return;
   }
 
+  // Get existing orders from storage, or empty array
   const orders = JSON.parse(localStorage.getItem("orders")) || [];
-  orders.push({ items: cart, date: new Date().toLocaleString() });
+
+  // Build the new order object including cart and user details
+  const newOrder = {
+    items: cart,
+    date: new Date().toLocaleString(),
+    customer: {
+      fullname: userDetails.fullname,
+      address: userDetails.address,
+      phone: userDetails.phone,
+      landmark: userDetails.landmark,
+    },
+  };
+
+  // Add to orders list and save
+  orders.push(newOrder);
   localStorage.setItem("orders", JSON.stringify(orders));
+
+  // Clear cart, update UI etc.
   localStorage.removeItem("cart");
   updateCartCount();
   displayCart();
+
   alert("Order placed successfully!");
 }
+
 // ----------------- History Page -----------------
 
 function displayHistory() {
@@ -190,10 +259,10 @@ function displayHistory() {
 
   if (orders.length === 0) {
     historyContainer.innerHTML = `
-    <div class="empty">
-    <img src="image/box.png"  alt="" /> 
-    <p>No orders yet.  </p>
-    </div>`;
+      <div class="empty">
+        <img src="image/box.png" alt="" />
+        <p>No orders yet.</p>
+      </div>`;
     return;
   }
 
@@ -202,7 +271,22 @@ function displayHistory() {
   orders.forEach((order, orderIndex) => {
     const div = document.createElement("div");
     div.classList.add("history-item");
-    div.innerHTML = `<strong>Order #${orderIndex + 1} - ${order.date}</strong>`;
+    const div3 = document.createElement("div");
+    div3.classList.add("div3");
+    // Show order number and date
+    // If customer info exists — display it
+    if (order.customer) {
+      div3.innerHTML = `
+        <div class="customer-info">
+          <p><strong>Name:</strong> ${order.customer.fullname}</p>
+          <p><strong>Address:</strong> ${order.customer.address}</p>
+          <p><strong>Phone:</strong> ${order.customer.phone}</p>
+          <p><strong>Landmark / Details:</strong> ${order.customer.landmark || "-"}</p>
+        </div>
+      
+      `;
+    }
+    div3.innerHTML += `<strong>Order #${orderIndex + 1} - ${order.date}</strong><br/>`;
 
     // Aggregate items by name
     const aggregated = {};
@@ -213,20 +297,25 @@ function displayHistory() {
         aggregated[item.name] = { ...item, quantity: 1 };
       }
     });
-
+    const div2 = document.createElement("div");
+    div2.classList.add("history-btn");
+    // List ordered items
     Object.values(aggregated).forEach((item) => {
       const p = document.createElement("p");
       p.innerHTML = `
         <img src="${item.img}" alt="${item.name}" class="history-img" />
-        ${item.name} - ₱${item.price} Total (${item.quantity} item): ₱${item.price * item.quantity}
+        ${item.name} — ₱${item.price}  (Quantity: ${item.quantity}) → Total: ₱${item.price * item.quantity}
       `;
-      div.appendChild(p);
+      div2.appendChild(p);
     });
 
+    // Cancel order button (optional)
     const cancelBtn = document.createElement("button");
     cancelBtn.textContent = "Cancel Order";
     cancelBtn.addEventListener("click", () => cancelOrder(orderIndex));
-    div.appendChild(cancelBtn);
+    div2.appendChild(cancelBtn);
+    div.appendChild(div3);
+    div.appendChild(div2);
 
     historyContainer.appendChild(div);
   });
@@ -252,8 +341,8 @@ document.addEventListener("DOMContentLoaded", () => {
   displayCart();
   displayHistory();
 
-  const orderBtn = document.getElementById("order-now");
-  if (orderBtn) orderBtn.addEventListener("click", orderNow);
+  // const orderBtn = document.getElementById("order-now");
+  // if (orderBtn) orderBtn.addEventListener("click", orderNow);
 });
 
 window.addEventListener("scroll", () => {
@@ -292,17 +381,17 @@ const items = [
 
 // Select the existing section-2 container
 const section2 = document.querySelector(".section-2.index");
+if (section2) {
+  // Loop through items and generate HTML inside section-2
+  items.forEach((item, index) => {
+    const itemDiv = document.createElement("div");
+    itemDiv.classList.add("item");
 
-// Loop through items and generate HTML inside section-2
-items.forEach((item, index) => {
-  const itemDiv = document.createElement("div");
-  itemDiv.classList.add("item");
+    if (index % 2 !== 0) {
+      itemDiv.classList.add("reverse");
+    }
 
-  if (index % 2 !== 0) {
-    itemDiv.classList.add("reverse");
-  }
-
-  itemDiv.innerHTML = `
+    itemDiv.innerHTML = `
     <div class="item-image"><img src="${item.image}"></div>
     <div class="item-description">
       <h2>${item.title}</h2>
@@ -310,8 +399,9 @@ items.forEach((item, index) => {
     </div>
   `;
 
-  section2.appendChild(itemDiv);
+    section2.appendChild(itemDiv);
 
-  // Add this item to the observer
-  observer.observe(itemDiv);
-});
+    // Add this item to the observer
+    observer.observe(itemDiv);
+  });
+}

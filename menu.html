@@ -15,16 +15,12 @@
           <p>Lumpia King</p>
         </div>
 
-        <!-- WRAP BOTH MENUS (desktop & mobile use the SAME items) -->
         <div class="nav-links" id="nav-links">
           <ul class="a-menu">
             <li><a href="index.html">Home</a></li>
             <li><a href="about.html">About</a></li>
             <li><a href="menu.html" class="active">Menu</a></li>
-            <li><a href="history.html">History</a></li>
-          </ul>
-
-          <ul>
+            <li><a href="order.html">Order</a></li>
             <li>
               <a href="cart.html" class="cart-content" id="cart-link">
                 <img src="image/cart.png" width="20px" alt="" />
@@ -32,8 +28,12 @@
               </a>
             </li>
           </ul>
+
+          <!-- WEATHER WIDGET -->
+          <div class="weather" id="weather">Loading...</div>
+          <!-- NEWS WIDGET -->
+          <div class="news-headlines" id="news-headlines">Loading news...</div>
         </div>
-        <!-- BURGER BUTTON -->
         <div class="burger" id="burger">
           <span></span>
           <span></span>
@@ -90,5 +90,7 @@
       </div>
     </footer>
   </body>
+  <script src="weather.js"></script>
+  <script src="news.js"></script>
   <script src="script.js"></script>
 </html>
